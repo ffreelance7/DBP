@@ -1,0 +1,149 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+	<style>
+		body{
+			margin: 0px;
+			padding: 0px;
+		}
+		.conten{
+				position: absolute;
+				width: 100%;
+		}
+    .color{
+      background-color: rgba(0,0,0,0.9);
+    }
+		.dado-content{
+			border: 1px solid rgba(0,0,0,0.2);
+			border-radius:20px;
+		}
+		.redondo{
+			padding: 0px;
+			position: relative;
+			height:50px;
+			width:50px;
+			border-radius:50px;
+		}
+		.piece{
+			padding: 15px;
+		}
+
+	</style>
+ 	<script>
+	var pun1=null;
+	var pun2=null;
+	function cargar(){
+		var cont = document.getElementById('conten');
+		var table2 = document.createElement('table');
+		var table1 = document.createElement('table');
+		var id_n=0;
+
+		table2.className="dado-content";
+		table1.className="dado-content";
+
+		for(var i=0;i<3;i++){
+			var tr2=document.createElement("tr");
+			tr2.className="piece-content";
+			var tr1=document.createElement("tr");
+			tr1.className="piece-content";
+			for(var j=0;j<3;j++){
+					var redondo=document.createElement('div');
+					var redondo1=document.createElement('div');
+					var td1=document.createElement("td");
+					var td2=document.createElement("td");
+					redondo.className="redondo";
+					redondo1.className="redondo";
+					td1.className="piece";
+					td2.className="piece";
+					td2.id="player2-"+id_n;
+					td1.id="player1-"+id_n;
+					td1.appendChild(redondo);
+					td2.appendChild(redondo1);
+					tr1.appendChild(td1);
+					tr2.appendChild(td2);
+					id_n++;
+			}
+			table1.appendChild(tr1);
+			table2.appendChild(tr2);
+		}
+		cont.appendChild(table1);
+		cont.appendChild(table2);
+	}
+			function clear_(player){
+				var cc=document.getElementById('puntuacion');
+				cc.innerHTML="";
+				if(player=="player1"){
+						pun1=null;
+				}else{
+						pun2=null;
+				}
+			   for (var i=0; i<9; i++) {
+			        $("#"+player+"-"+i).children("div").removeClass("color");
+			    }
+			}
+
+			function lanzar(player) {
+				var cc=document.getElementById('puntuacion');
+				cc.innerHTML="";
+			  var valor = Math.floor(Math.random()*6+1);
+			  var dado = {
+			    1: [4],
+			    2: [0, 8],
+			    3: [0, 4, 8],
+			    4: [0, 2, 6, 8],
+			    5: [0, 2, 4, 6, 8],
+			    6: [0, 2, 3, 5, 6, 8],
+			  };
+			  pintar(dado[valor],player);
+			}
+			function pintar(items,player) {
+			  clear_(player);
+				if(player=="player1"){
+					pun1=items.length;
+				}else{
+					pun2=items.length;
+				}
+			  for (var i=0; i<items.length; i++) {
+			    $("#"+player+"-"+items[i]).children("div").addClass("color");
+			  }
+				verifi_win();
+			}
+			function verifi_win(){
+
+				if(pun2!=null && pun1!=null){
+
+					var cc=document.getElementById('puntuacion');
+					var win;
+					if(pun2>pun1){
+						win="Jugador 2 <strong>gano</strong> sacando :" +pun2;
+					}else if (pun2<pun1) {
+						win="Jugador 1 <strong>gano</strong> sacando :" +pun1;
+					}else{
+						win="<strong>Empate</strong>";
+					}
+					cc.innerHTML=win;
+				}
+			}
+      </script>
+	</head>
+	<body onload="cargar();">
+		<section class="content-inputs">
+			<button type="button" class="btn btn-primary" onclick="lanzar('player1');">Lanzar Dado</button>
+      <button type="button" class="btn btn-secondary" onclick="clear_('player1');">Limpiar</button>
+
+			<button type="button" class="btn btn-primary" onclick="lanzar('player2');">Lanzar Dado</button>
+      <button type="button" class="btn btn-secondary" onclick="clear_('player2');">Limpiar</button>
+
+			<input type="text" class="form-control" placeholder="Resultado del Lanzado" width="50%;">
+		</section>
+		<section id="conten">
+
+		</section>
+		<div id="puntuacion" class="alert alert-success">
+
+		</div>
+	</body>
+</html>
